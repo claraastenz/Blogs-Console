@@ -68,14 +68,27 @@ class Program
 
     static void AddBlog()
     {
+        try
+    {
         Console.Write("Enter a name for a new Blog: ");
-        var name = Console.ReadLine();
+        string name = Console.ReadLine();
+        
+        if (string.IsNullOrWhiteSpace(name))
+        {
+            throw new ArgumentException("Blog name cannot be empty.");
+        }
 
         using (var db = new BloggingContext())
         {
             var blog = new Blog { Name = name };
             db.AddBlog(blog);
         }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("An error occurred while adding the blog.");
+        throw ex;
+    }
     }
 
     static void CreatePost()
