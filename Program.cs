@@ -51,6 +51,8 @@ class Program
         {
             logger.Error(ex.Message);
         }
+        
+    logger.Info("Program ended");
     }
 
     static void DisplayAllBlogs()
