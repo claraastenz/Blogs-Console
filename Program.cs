@@ -138,8 +138,49 @@ class Program
 
     static void DisplayPosts()
     {
+        try
+    {
         Console.WriteLine("Display Posts option selected.");
-        // Implement logic to display posts
+
+        // Prompt the user to select a blog
+        Console.WriteLine("Select a blog to view its posts:");
+        DisplayAllBlogs();
+        Console.Write("Enter the name of the blog: ");
+        string blogName = Console.ReadLine();
+
+        // Retrieve the selected blog from the database
+        using (var db = new BloggingContext())
+        {
+            var selectedBlog = db.Blogs.FirstOrDefault(b => b.Name == blogName);
+
+            if (selectedBlog == null)
+            {
+                Console.WriteLine("Blog not found. Please select a valid blog.");
+                return;
+            }
+
+            // Retrieve all posts related to the selected blog
+            var posts = db.Posts.Where(p => p.BlogId == selectedBlog.BlogId).ToList();
+
+            // Display the number of posts
+            Console.WriteLine($"Number of posts for {selectedBlog.Name}: {posts.Count}");
+
+            // Display each post
+            Console.WriteLine("Posts:");
+            foreach (var post in posts)
+            {
+                Console.WriteLine($"Blog: {selectedBlog.Name}");
+                Console.WriteLine($"Title: {post.Title}");
+                Console.WriteLine($"Content: {post.Content}");
+                Console.WriteLine();
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine("An error occurred while displaying posts.");
+        throw ex;
+    }
     }
     
 
